@@ -1,0 +1,33 @@
+// Created by: Jeremy Rotsztain
+// ShaderArt (DIGF-3011, Winter 2022)
+// Week 02 Homework - Gradient
+ 
+// Edited by: Aimee Chen #3175402
+
+#ifdef GL_ES
+precision mediump float;
+#endif
+
+uniform vec2 u_resolution;
+uniform vec2 u_mouse;
+uniform float u_time;
+
+
+
+void main() {
+    vec2 st = gl_FragCoord.xy/u_resolution.xy; //setting up canvas
+    vec2 mouseXY = u_mouse / u_resolution; //setting up mouse value for position
+    
+    vec3 colorA = vec3(cos(u_time),0.480,0.193); // color changes as the time value changes, multiply by cos value
+	vec3 colorB = vec3(u_mouse.y,0.865,1.000); // color changes as mouse y position value changes
+
+    
+    vec3 color = vec3(0.830,0.499,0.403);
+
+    float pct = abs(0.2*tan(u_time)); // with different trigonometic function - tangent
+    // Mix uses pct (a value from 0-1) 
+    // mix the two colors
+    color = mix(colorA, colorB, smoothstep( 0.1,0.5*1.5, st.y));
+
+    gl_FragColor = vec4(color,1.0);
+}
