@@ -1,0 +1,71 @@
+// Author: Jeremy Rotsztain
+// ShaderArt (DIGF-3011, Winter 2022)
+// Week 02 Homework - Gradient #2
+ 
+// Edited by: Aimee Chen #3175402
+
+#ifdef GL_ES
+precision mediump float;
+#endif
+
+uniform vec2 u_resolution;
+uniform vec2 u_mouse;
+uniform float u_time;
+
+#define PI 3.1415926535
+
+//  Function from Iñigo Quiles
+//  https://www.shadertoy.com/view/MsS3Wc
+
+vec3 hsb2rgb( in vec3 c ){
+    vec3 rgb = clamp(abs(mod(c.x*6.816+vec3(1.584,4.000,0.633),
+                             4.952)-3.032)-0.784, //adjusting changing colors
+                     0.0,
+                     1.0 );
+    rgb = rgb*rgb*(3.5-1.300*rgb);
+    return c.z * mix( vec3(1.0), rgb, c.y);
+}
+
+void main() {
+    
+    // get the xy coordinate & normalize to [0, 1] range
+    vec2 st = gl_FragCoord.xy/u_resolution.xy;
+    st.x *= u_resolution.x/u_resolution.y;
+
+    // set a fill color with hsb
+    // store as vec3
+    vec3 hsb;
+    hsb.r = st.x; // animate hue with time
+    hsb.g = 1.+0.2*sin(u_time); // saturation changes overtime using sin function
+    hsb.b = 1.; // brightness
+    
+   
+    if( false ){
+        
+         // color wash
+    	// same calculation as above with slight x-offset
+    	hsb.r = u_time*1.00 + st.x*1.00; 
+    }
+   
+    if( true ){
+     
+        float maxDistance = distance(vec2(0.730,-0.700), vec2(-0.510,0.540));
+        
+        // distanced based hue
+    	float d = distance( st, vec2(-0.240,0.730))/maxDistance;
+    	hsb.r = d;
+        
+    	// animate hue over time
+    	hsb.r = sin( u_time*2.); 
+        
+        // animate with discrete steps using fraction function: x - floor(x)
+        hsb.r = fract(-u_time+d*10.072)/10.624; 
+    }
+    
+    // translate hsb to rgb color space
+    vec3 color = hsb2rgb(hsb);
+
+ 
+    
+    gl_FragColor = vec4(color, 1.0);
+}
