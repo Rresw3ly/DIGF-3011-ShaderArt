@@ -39,16 +39,19 @@ void main() {
     
     float rect1 = drawRectangle(st+vec2(0.0, 0.), vec2(0.750,0.750));
     
+    // set up rectangles' position
     float rect2 = drawRectangle(st, vec2(0.870,0.6));
-    float rect3 = drawRectangle(st, vec2(0.75,0.05));
-    float rect4 = drawRectangle(st+vec2(0.0, 0.), vec2(0.750,0.750));
+    float rect3 = drawRectangle(st, vec2(0.590,0.280));
+    float rect4 = drawRectangle(st+vec2(-0.000,0.000), vec2(0.400,0.140));
     
-    // create an outline
+    // create an outline (difference of rect 2 and rect 3)
     rect2 = rect2 - rect3;
-    color = vec3( rect2);
+    color = vec3( rect4);
     
+    // mix rects' color
     color = mix( color, vec3(st.x, st.y, 1.056-st.y), rect1);
-    color = mix( color, vec3(1.240-st.x, 0.760-st.y, st.y), rect2);
+    color = mix( color, vec3(0.232+st.x, 0.768-st.y, st.y), rect2);
+    color = mix( color, vec3((0.592-st.x), -0.264+st.y, 0.1+st.x), rect4);
     
     gl_FragColor = vec4(color, 1.0);
 }
