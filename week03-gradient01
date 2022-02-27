@@ -14,15 +14,16 @@ uniform float u_time;
 
 float drawRectangle( vec2 st, vec2 size ){
     
+    // set up border for four rectangles
     vec2 border = (vec2(1.0)-size)/2.0;
     
     float squareX = 0.0;
     squareX = step( border.x, st.x );
-    squareX *= (1.0-step( 1.0-border.x, st.x ));
+    squareX *= (1.0-step( 1.0-border.x, st.x )); // horizontal border
     
     float squareY = 0.0;
     squareY = step( border.y, st.y );
-    squareY *= (1.0-step( 1.0-border.y, st.y ));
+    squareY *= (1.0-step( 1.0-border.y, st.y )); // vertical border
     
     float square = squareX * squareY;
     
@@ -48,7 +49,7 @@ void main() {
     rect2 = rect2 - rect3;
     color = vec3( rect4);
     
-    // mix rects' color
+    // mix rectangles' color
     color = mix( color, vec3(st.x, st.y, 1.056-st.y), rect1);
     color = mix( color, vec3(0.232+st.x, 0.768-st.y, st.y), rect2);
     color = mix( color, vec3((0.592-st.x), -0.264+st.y, 0.1+st.x), rect4);
