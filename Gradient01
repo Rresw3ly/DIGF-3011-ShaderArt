@@ -1,0 +1,54 @@
+// Author: Jeremy Rotsztain
+// Week03 Homework
+// Edit by: Aimee Chen 
+
+#ifdef GL_ES
+precision mediump float;
+#endif
+
+uniform vec2 u_resolution;
+uniform vec2 u_mouse;
+uniform float u_time;
+
+#define PI 3.1415926535
+
+float drawRectangle( vec2 st, vec2 size ){
+    
+    vec2 border = (vec2(1.0)-size)/2.0;
+    
+    float squareX = 0.0;
+    squareX = step( border.x, st.x );
+    squareX *= (1.0-step( 1.0-border.x, st.x ));
+    
+    float squareY = 0.0;
+    squareY = step( border.y, st.y );
+    squareY *= (1.0-step( 1.0-border.y, st.y ));
+    
+    float square = squareX * squareY;
+    
+    return square;
+}
+
+void main() {
+    
+    // get the xy coordinate & normalize to [0, 1] range
+    vec2 st = gl_FragCoord.xy/u_resolution.xy;
+    st.x *= u_resolution.x/u_resolution.y;
+    
+    vec3 color = vec3(0);
+    
+    float rect1 = drawRectangle(st+vec2(0.0, 0.), vec2(0.750,0.750));
+    
+    float rect2 = drawRectangle(st, vec2(0.870,0.6));
+    float rect3 = drawRectangle(st, vec2(0.75,0.05));
+    float rect4 = drawRectangle(st+vec2(0.0, 0.), vec2(0.750,0.750));
+    
+    // create an outline
+    rect2 = rect2 - rect3;
+    color = vec3( rect2);
+    
+    color = mix( color, vec3(st.x, st.y, 1.056-st.y), rect1);
+    color = mix( color, vec3(1.240-st.x, 0.760-st.y, st.y), rect2);
+    
+    gl_FragColor = vec4(color, 1.0);
+}
